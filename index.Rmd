@@ -2,7 +2,12 @@
 title: "Evolutionary Biology and Genomics"
 author: Katie Gilliam
 date: 8/31/2020
+bibliography: references.bib
 output: html_document
 ---
 
 [Lab1](Lab1_katiegilliam.html)
+
+Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
+
+# REFERENCES
