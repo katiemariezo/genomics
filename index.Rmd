@@ -1,10 +1,14 @@
 ---
 title: "Evolutionary Biology and Genomics"
 author: Katie Gilliam
+university: University of Massachusetts Amherst
+lab: Min Chen Laboratory
+job title: Molecular and Cellular Biology Graduate Student
 date: 8/31/2020
 bibliography: references.bib
 output: html_document
 ---
+![](images/Presentation1.tiff)
 
 [Lab1](Lab1_katiegilliam.html)
 
