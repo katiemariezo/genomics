@@ -1,8 +1,6 @@
 ---
 title: "Evolutionary Biology and Genomics"
-author: Katie Gilliam
-university: University of Massachusetts Amherst
-lab: Min Chen Laboratory
+author: Kaitlyn Gilliam
 job title: Molecular and Cellular Biology Graduate Student
 date: 8/31/2020
 bibliography: references.bib
@@ -11,6 +9,9 @@ output: html_document
 ![](images/Presentation1.tiff)
 
 [Lab1](Lab1_katiegilliam.html)
+
+[Lab3a](Lab3/Lab3a.html)
+
 
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
