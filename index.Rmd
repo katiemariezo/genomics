@@ -12,6 +12,7 @@ output: html_document
 
 [Lab3a](Lab3/Lab3a.html)
 
+[Lab3b](Lab3/Lab3b.html)
 
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
