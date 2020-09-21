@@ -14,6 +14,8 @@ output: html_document
 
 [Lab3b](Lab3/Lab3b.html)
 
+[Lab4a](Lab4.html)
+
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
 # REFERENCES
