@@ -1,6 +1,6 @@
 ---
 title: "Lab4a"
-output: html_notebook
+output: html_document
 ---
 
 ## Importing John Hopkins University Data
