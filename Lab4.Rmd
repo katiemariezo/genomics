@@ -1,0 +1,195 @@
+---
+title: "Lab4a"
+output: html_notebook
+---
+
+## Importing John Hopkins University Data
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+report_03_11_2020 <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-11-2020.csv")) %>%
+rename(Country_Region = "Country/Region", Province_State = "Province/State")
+```
+
+
+```{r}
+library(data.table)
+```
+
+
+## 1. What are the differences between 3/13/2020, the Friday before spring break 2020 and yesterday 6 months later on 9/13/2020? 
+
+```{r}
+report_09_13_2020 <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-13-2020.csv"))
+```
+
+```{r}
+str(report_03_11_2020)
+```
+
+```{r}
+str(report_09_13_2020)
+```
+
+There are more column included in the 9/13/2020 data set, such as:  FIPS, Admin2, Active, Combined_Key, Incidence_Rate and Case-Fatality_Ratio.
+
+
+## 2. Make a data frame with the total counts for each country by tibble.
+
+```{r}
+report_March_country_total <- report_03_11_2020 %>%
+  group_by(Country_Region) %>%
+  summarise(Total_Confirmed = sum(Confirmed),
+    Total_Deaths = sum(Deaths),
+    Total_Recovered = sum(Recovered)
+  )
+```
+
+
+```{r}
+report_Sept_country_total <- report_09_13_2020 %>%
+  group_by(Country_Region) %>%
+  summarise(
+    Total_Confirmed = sum(Confirmed),
+    Total_Deaths = sum(Deaths),
+    Total_Recovered = sum(Recovered)
+  )
+```
+
+```{r}
+data.table(report_March_country_total)
+```
+```{r}
+data.table(report_Sept_country_total)
+```
+
+## 3. To get counts for confirmed cases per U.S state use filter() to select US and group_by and summarize as above.
+
+```{r}
+report_March_US_conf <- report_03_11_2020 %>%
+  filter(Country_Region == "US") %>%
+  select(Province_State, Confirmed)
+
+report_Sept_US_conf <- report_09_13_2020 %>%
+  filter(Country_Region == "US") %>%
+  group_by(Province_State) %>%
+  summarize(Total_Confirmed = sum(Confirmed))
+```
+
+
+```{r}
+data.table(report_March_US_conf)
+```
+
+```{r}
+data.table(report_Sept_US_conf)
+```
+## 4.Use arrange_by() and slice() to get just the top 10 countries for Deaths.
+
+```{r}
+report_March_top10 <- report_March_country_total %>%
+  select(Country_Region, Total_Deaths) %>%
+  arrange(desc(Total_Deaths)) %>%
+  slice(1:10)
+report_Sept_top10 <- report_Sept_country_total %>%
+  select(Country_Region, Total_Deaths) %>%
+  arrange(desc(Total_Deaths)) %>%
+  slice(1:10)
+```
+
+
+```{r}
+data.table(report_March_top10)
+```
+
+```{r}
+data.table(report_Sept_top10)
+```
+
+## 5. Make plots using geom_point() of the (top) 10 countries with the confirmed cases and deaths (two separate graphs) on 3/12/2020 and 9/12/2020.
+
+
+```{r}
+March_death_plot <- ggplot(data = report_March_top10, 
+                       mapping = aes(x = Country_Region, y = Total_Deaths))
+March_death_plot + 
+    geom_point() +
+  ggtitle("Total Deaths per Country for March 2020")
+```
+
+
+
+```{r}
+Sept_death_plot <- ggplot(data = report_Sept_top10, 
+                       mapping = aes(x = Country_Region, y = Total_Deaths))
+Sept_death_plot + 
+    geom_point() +
+  ggtitle("Total Deaths per Country for September 2020")
+```
+
+
+
+
+```{r}
+report_March_top10_conf <- report_March_country_total %>%
+  select(Country_Region, Total_Confirmed) %>%
+  arrange(desc(Total_Confirmed)) %>%
+  slice(1:10)
+report_Sept_top10_conf <- report_Sept_country_total %>%
+  select(Country_Region, Total_Confirmed) %>%
+  arrange(desc(Total_Confirmed)) %>%
+  slice(1:10)
+
+March_conf_plot <- ggplot(data = report_March_top10_conf, 
+                       mapping = aes(x = Country_Region, y = Total_Confirmed))
+March_conf_plot + 
+    geom_point() +
+  ggtitle("Top 10 Total Confirmed Cases per Country for March 2020")
+```
+
+
+```{r}
+Sept_conf_plot <- ggplot(data = report_Sept_top10_conf, 
+                       mapping = aes(x = Country_Region, y = Total_Confirmed))
+Sept_conf_plot + 
+    geom_point() +
+  ggtitle("Top 10 Total Confirmed Cases per Country for September 2020")
+```
+
+## 6. Make using geom_bar of the (top) 10 states with the most confirmed cases and deaths (two separate graphs) on 3/12/2020 and 9/12/2020.
+
+```{r}
+report_March_top_US_conf <- report_March_US_conf %>%
+  select(Province_State, Confirmed) %>%
+  arrange(desc(Confirmed)) %>%
+  slice(1:10)
+
+ggplot(report_March_top_US_conf, aes(x = Confirmed, y = Province_State)) +
+geom_bar(stat = 'identity') +
+  ggtitle("Top 10 Total Confirmed Cases per US State for March 2020")
+```
+
+```{r}
+report_Sept_top_US_conf <- report_Sept_US_conf %>%
+  select(Province_State, Total_Confirmed) %>%
+  arrange(desc(Total_Confirmed)) %>%
+  slice(1:10)
+
+ggplot(report_Sept_top_US_conf, aes(x = Total_Confirmed, y = Province_State)) +
+geom_bar(stat = 'identity') +
+  ggtitle("Top 10 Total Confirmed Cases per US State for September 2020")
+```
+
+
+
+
+
+
+
+
+
+
+
