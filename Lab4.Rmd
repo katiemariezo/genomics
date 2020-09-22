@@ -3,11 +3,20 @@ title: "Lab4a"
 output: html_document
 ---
 
-## Importing John Hopkins University Data
+## Getting set up: downloading packages, libraries and the John Hopkins Data. 
+
+```{r}
+install.packages("tidyverse")
+```
 
 ```{r}
 library(tidyverse)
 ```
+
+```{r}
+library(DT)
+```
+
 
 ```{r}
 report_03_11_2020 <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-11-2020.csv")) %>%
@@ -16,15 +25,10 @@ rename(Country_Region = "Country/Region", Province_State = "Province/State")
 
 
 ```{r}
-library(data.table)
-```
-
-
-## 1. What are the differences between 3/13/2020, the Friday before spring break 2020 and yesterday 6 months later on 9/13/2020? 
-
-```{r}
 report_09_13_2020 <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-13-2020.csv"))
 ```
+
+## 1. What are the differences between 3/13/2020, the Friday before spring break 2020 and yesterday 6 months later on 9/13/2020? 
 
 ```{r}
 str(report_03_11_2020)
@@ -52,18 +56,17 @@ report_March_country_total <- report_03_11_2020 %>%
 ```{r}
 report_Sept_country_total <- report_09_13_2020 %>%
   group_by(Country_Region) %>%
-  summarise(
-    Total_Confirmed = sum(Confirmed),
+  summarise(Total_Confirmed = sum(Confirmed),
     Total_Deaths = sum(Deaths),
     Total_Recovered = sum(Recovered)
   )
 ```
 
 ```{r}
-data.table(report_March_country_total)
+datatable(report_March_country_total)
 ```
 ```{r}
-data.table(report_Sept_country_total)
+datatable(report_Sept_country_total)
 ```
 
 ## 3. To get counts for confirmed cases per U.S state use filter() to select US and group_by and summarize as above.
@@ -81,13 +84,13 @@ report_Sept_US_conf <- report_09_13_2020 %>%
 
 
 ```{r}
-data.table(report_March_US_conf)
+datatable(report_March_US_conf)
 ```
 
 ```{r}
-data.table(report_Sept_US_conf)
+datatable(report_Sept_US_conf)
 ```
-## 4.Use arrange_by() and slice() to get just the top 10 countries for Deaths.
+## 4. Use arrange_by() and slice() to get just the top 10 countries for Deaths.
 
 ```{r}
 report_March_top10 <- report_March_country_total %>%
@@ -102,11 +105,11 @@ report_Sept_top10 <- report_Sept_country_total %>%
 
 
 ```{r}
-data.table(report_March_top10)
+datatable(report_March_top10)
 ```
 
 ```{r}
-data.table(report_Sept_top10)
+datatable(report_Sept_top10)
 ```
 
 ## 5. Make plots using geom_point() of the (top) 10 countries with the confirmed cases and deaths (two separate graphs) on 3/12/2020 and 9/12/2020.
