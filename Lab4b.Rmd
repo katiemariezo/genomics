@@ -17,7 +17,7 @@ download.file("http://r-bio.github.io/data/surveys_complete.csv",
 surveys_complete <- read_csv(file = "surveys_complete.csv")
 ```
 
-#Example Plot
+## Example Plot
 
 
 ```{r}
