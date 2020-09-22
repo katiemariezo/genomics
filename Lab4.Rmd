@@ -90,6 +90,8 @@ datatable(report_March_US_conf)
 ```{r}
 datatable(report_Sept_US_conf)
 ```
+
+
 ## 4. Use arrange_by() and slice() to get just the top 10 countries for Deaths.
 
 ```{r}
