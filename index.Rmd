@@ -18,6 +18,10 @@ output: html_document
 
 [Lab4b](Lab4b.html)
 
+[Lab5](Lab5.html)
+
+
+
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
 # REFERENCES
