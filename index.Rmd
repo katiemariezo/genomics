@@ -20,7 +20,7 @@ output: html_document
 
 [Lab5](Lab5.html)
 
-
+[Lab5x](Lab5x.html)
 
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
