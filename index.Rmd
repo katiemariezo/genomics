@@ -2,7 +2,6 @@
 title: "Evolutionary Biology and Genomics"
 author: Kaitlyn Gilliam
 job title: Molecular and Cellular Biology Graduate Student
-date: 8/31/2020
 bibliography: references.bib
 output: html_document
 ---
@@ -21,6 +20,8 @@ output: html_document
 [Lab5](Lab5.html)
 
 [Lab5x](Lab5x.html)
+
+[Lab6](Lab6.html)
 
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 

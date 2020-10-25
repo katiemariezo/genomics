@@ -1,0 +1,249 @@
+---
+title: "September 26, 2020 COVID Report for the US and Oklahoma"
+author: "Kaitlyn Gilliam "
+output: html_document
+bibliography: references_Lab6.bib
+---
+
+```{r, include = FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+library(lubridate)
+install.packages("plotly")
+library(plotly)
+```
+
+
+```{r, include = FALSE}
+install.packages("maps")
+install.packages("mapdata")
+install.packages("viridis")
+install.packages("wesanderson")
+library(tidyverse)
+library(maps)
+library(mapdata)
+library(lubridate)
+library(viridis)
+library(wesanderson)
+```
+
+
+```{r, include = FALSE}
+# Read in the daily report
+daily_report_drb <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-26-2020.csv")) %>%
+  rename(Long = "Long_") %>% 
+  group_by(Country_Region) %>% 
+  summarize(Confirmed = sum(Confirmed), Deaths = sum(Deaths))
+
+# Read in the world map data
+world <- as_tibble(map_data("world"))
+
+# Check to see if there are differences in the naming of countries
+setdiff(world$region, daily_report_drb$Country_Region) 
+```
+
+
+
+## World Report of COVID-19 Deaths on 9-26-2020
+
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
+# Many of these countries are considered states or territories in the JHU covid reports
+world <- as_tibble(map_data("world")) %>% 
+ mutate(region = str_replace_all(region, c("USA" = "US", "Czech Republic" = "Czechia",  
+        "Ivory Coast" = "Cote d'Ivoire", "Democratic Republic of the Congo" = "Congo (Kinshasa)", 
+        "Republic of Congo" = "Congo (Brazzaville)")))
+
+# Join the covid report with the map data
+country_join <- left_join(world, daily_report_drb, by = c("region" = "Country_Region"))
+
+# Create the graph
+ggplotly(
+ggplot(data = world, mapping = aes(x = long, y = lat, text = region, group = group)) + 
+  coord_fixed(1.3) + 
+# Add data layer
+  geom_polygon(data = country_join, aes(fill = Deaths), color = "black") +
+  scale_fill_gradientn(colours = 
+                         wes_palette("Zissou1", 100, type = "continuous")) +
+  labs(title = "COVID-19 Deaths 9-26-2020")
+)
+
+```
+
+
+## World Report of COVID-19 Deaths on 9-26-2020 
+
+```{r, include = FALSE}
+daily_report_new <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-26-2020.csv")) %>% 
+  rename(Long = "Long_") %>% 
+  filter(Lat != "NA") %>% 
+  filter(Long != "NA") 
+```
+
+
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
+ggplot(daily_report_new, aes(x = Long, y = Lat, size = Confirmed/10000)) +
+    borders("world", colour = NA, fill = "grey90") +
+    theme_bw() +
+    geom_point(shape = 21, color='blue', fill='blue', alpha = 0.5) +
+    labs(title = 'COVID-19 Confirmed Cases 9-26-2020',x = 'lat', y = 'long',
+        size="Cases (x10000))") +
+    theme(legend.position = "right") +
+    coord_fixed(ratio=1.5)
+```
+
+## United States Confirmed COVID-19 Cases on 9-26-2020
+
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
+daily_report_anisa <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-26-2020.csv")) %>% 
+  rename(Long = "Long_") %>% 
+  filter(Country_Region == "US") %>% 
+  filter (!Province_State %in% c("Alaska","Hawaii", "American Samoa",
+                  "Puerto Rico","Northern Mariana Islands", 
+                  "Virgin Islands", "Recovered", "Guam", "Grand Princess",
+                  "District of Columbia", "Diamond Princess")) %>% 
+  filter(Lat > 0)
+```
+
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
+mybreaks <- c(1, 100, 1000, 10000, 10000)
+ggplot(daily_report_anisa, aes(x = Long, y = Lat, size = Confirmed)) +
+    borders("state", colour = "white", fill = "grey90") +
+    geom_point(aes(x=Long, y=Lat, size=Confirmed, color=Confirmed),stroke=F, alpha=0.7) +
+    scale_size_continuous(name="Cases", trans="log", range=c(1,7), 
+                        breaks=mybreaks, labels = c("1-99",
+                        "100-999", "1,000-9,999", "10,000-99,999", "50,000+")) +
+    scale_color_viridis_c(option="viridis",name="Cases",
+                        trans="log", breaks=mybreaks, labels = c("1-99",
+                        "100-999", "1,000-9,999", "10,000-99,999", "50,000+"))  +
+# Cleaning up the graph
+  
+  theme_void() + 
+    guides( colour = guide_legend()) +
+    labs(title = "COVID-19 Confirmed Cases in the US 9-26-2020") +
+    theme(
+      legend.position = "bottom",
+      text = element_text(color = "#22211d"),
+      plot.background = element_rect(fill = "#ffffff", color = NA), 
+      panel.background = element_rect(fill = "#ffffff", color = NA), 
+      legend.background = element_rect(fill = "#ffffff", color = NA)
+    ) +
+    coord_fixed(ratio=1.5)
+```
+
+
+## Confirmed COVID-19 US Cases by County on 9-26-2020 
+
+
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
+library(RColorBrewer)
+report_county <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-26-2020.csv")) %>% 
+  rename(Long = "Long_") %>% 
+  unite(Key, Admin2, Province_State, sep = ".") %>% 
+  group_by(Key) %>% 
+  summarize(Confirmed = sum(Confirmed)) %>% 
+  mutate(Key = tolower(Key))
+# get and format the map data
+us <- map_data("state")
+counties <- map_data("county") %>% 
+  unite(Key, subregion, region, sep = ".", remove = FALSE)
+# Join the 2 tibbles
+state_join <- left_join(counties, report_county, by = c("Key"))
+# sum(is.na(state_join$Confirmed))
+ggplot(data = us, mapping = aes(x = long, y = lat, group = group)) + 
+  coord_fixed(1.3) + 
+  # Add data layer
+    borders("state", colour = "black") +
+  geom_polygon(data = state_join, aes(fill = Confirmed)) +
+  scale_fill_gradientn(colors = brewer.pal(n = 5, name = "BuGn"),
+                       breaks = c(1, 10, 100, 1000, 10000, 100000),
+                       trans = "log10", na.value = "White") +
+  ggtitle("Number of Confirmed Cases by US County 9-26-2020") +
+  theme_bw() 
+```
+
+## COVID-19 Confirmed Cases by Oklahoma County on 9-26-2020
+
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
+report_oklahoma <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-26-2020.csv")) %>% 
+  rename(Long = "Long_") %>% 
+  filter(Province_State == "Oklahoma") %>% 
+  group_by(Admin2) %>% 
+  summarize(Confirmed = sum(Confirmed)) %>% 
+  mutate(Admin2 = tolower(Admin2))
+us <- map_data("state")
+ok_us <- subset(us, region == "oklahoma")
+counties <- map_data("county")
+ok_county <- subset(counties, region == "oklahoma")
+state_join <- left_join(ok_county, report_oklahoma, by = c("subregion" = "Admin2")) 
+# plot state map
+ggplot(data = ok_county, mapping = aes(x = long, y = lat, group = group)) + 
+  coord_fixed(1.3) + 
+# Add data layer
+  geom_polygon(data = state_join, aes(fill = Confirmed), color = "white") +
+    scale_fill_gradientn(colors = brewer.pal(n = 5, name = "PuRd"),
+                         trans = "log10") +
+  labs(title = "COVID-19 Confirmed Cases in Oklahoma County on 9-26-2020")
+
+
+```
+
+## Interactive graph displaying the confirmed cases by Oklahoma county on 9-26-2020
+
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
+library(plotly)
+ggplotly(
+  ggplot(data = ok_county, mapping = aes(x = long, y = lat, group = group)) + 
+  coord_fixed(1.3) + 
+# Add data layer
+  geom_polygon(data = state_join, aes(fill = Confirmed), color = "black") +
+  scale_fill_gradientn(colours = 
+                         wes_palette("GrandBudapest2", 100, type = "continuous")) +
+
+  ggtitle("COVID-19 Confirmed Cases in Oklahoma 9-26-2020") +
+# Cleaning up the graph
+  labs(x=NULL, y=NULL) +
+  theme(panel.border = element_blank()) +
+  theme(panel.background = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(axis.text = element_blank())
+)
+```
+
+
+Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
+
+Data obtained from the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University (Dong, et al, 2020). 
+
+## REFERENCES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
