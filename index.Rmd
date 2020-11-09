@@ -5,7 +5,7 @@ job title: Molecular and Cellular Biology Graduate Student
 bibliography: references.bib
 output: html_document
 ---
-![](images/Presentation1.tiff)
+![](images/genomics.jpg)
 
 [Lab1](Lab1_katiegilliam.html)
 
@@ -24,6 +24,8 @@ output: html_document
 [Lab6](Lab6.html)
 
 [Lab6x](Lab6x.html)
+
+[Lab11](Lab11.html)
 
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
