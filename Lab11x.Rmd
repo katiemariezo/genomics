@@ -3,7 +3,7 @@ title: "Lab11x"
 output: html_document
 ---
 ## Lab 11x: Microbiome Analysis using phyloseq
-## 1. First Tutorial - Ordination Plots
+## First Tutorial - Ordination Plots
 
 
 ```{r}
@@ -246,6 +246,7 @@ p$layers
 p$layers <- p$layers[-1]
 p + geom_point(size=5, alpha=0.7)
 ```
+
 ## Third Tutorial - Heat Maps
 
 ```{r}
@@ -349,6 +350,8 @@ plot_heatmap(gpac, "MDS", "unifrac", "SampleType", "Family", weighted=TRUE)
 ## Here is how you might create a heatmap using base-R graphics and the more common (but problematic) hierarchical clustering organization, in case you want to compare with plot_heatmap, for example.
 heatmap(otu_table(gpac))
 ```
+
+
 ## Fourth Tutorial - Networks 
 
 ```{r}
