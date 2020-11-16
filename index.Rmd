@@ -27,6 +27,8 @@ output: html_document
 
 [Lab11](Lab11.html)
 
+[Lab11x](Lab11x.html)
+
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
 # REFERENCES
