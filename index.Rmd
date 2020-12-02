@@ -3,7 +3,10 @@ title: "Evolutionary Biology and Genomics"
 author: Kaitlyn Gilliam
 job title: Molecular and Cellular Biology Graduate Student
 bibliography: references.bib
-output: html_document
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
 ---
 ![](images/genomics.jpg)
 
