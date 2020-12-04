@@ -42,7 +42,7 @@ output:
 
 [Lab11x](Lab11x.html)
 
-[Link to my website](Lab13/docs/index.html) 
+Lab 13: Link to my website: katiemariezo.github.io/mywebsite 
 
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
 
