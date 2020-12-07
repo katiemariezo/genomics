@@ -12,6 +12,8 @@ output:
 
 [Lab1](Lab1_katiegilliam.html)
 
+[Lab2](Lab2.html)
+
 [Lab3a](Lab3/Lab3a.html)
 
 [Lab3b](Lab3/Lab3b.html)
