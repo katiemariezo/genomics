@@ -44,6 +44,8 @@ output:
 
 [Lab11x](Lab11x.html)
 
+[Lab12](Lab12.html)
+
 [Lab 13 My Website](https://katiemariezo.github.io/mywebsite/) 
 
 Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
